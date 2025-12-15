@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WRAPY FPS BOOST</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* --- ZMIENIONE ZMIENNE CSS NA CZARNO-BIAŁE --- */
+        :root {
+            --dark-bg: #141414;
+            --main-accent: #ffffff;
+            --tag-bg-color: #333333;
+            --tag-border: #555555;
+            --light-text: #ffffff;
+            --subtle-text: #cccccc;
+            --nav-text-color: #999999;
+            
+            --btn-gradient-start: #555555;
+            --btn-gradient-end: #888888;
+            --btn-shadow-color: rgba(255, 255, 255, 0.3);
+            
+            --tag-gradient-start: rgba(51, 51, 51, 0.8);
+            --tag-gradient-end: rgba(30, 30, 30, 0.8);
+
+            --highlight-color: var(--subtle-text); 
+            
+            /* ZMIENNE DLA CENNIKA */
+            --card-bg: #222222;
+            --best-choice-border: #ffffff;
+            --best-choice-shadow: rgba(255, 255, 255, 0.3);
+            --list-icon-color: #999999;
+            --buy-btn-bg: #333333;
+
+            /* ZMIENNE DLA MODALA */
+            --modal-bg: #1f1f1f;
+            --input-bg: #333333;
+            --input-border: #555555;
+            
+            /* NOWE ZMIENNE DLA BIAŁEJ AKTYWNEJ OPCJI PŁATNOŚCI */
+            --active-option-bg: #ffffff; 
+            --active-option-text: #141414; /* Ciemny tekst na jasnym tle */
+            --radio-checked-color: #141414; /* Ciemny kolor kółeczka/ramki aktywnej opcji */
+        }
+
+        /* --- Resetowanie i Podstawa --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+            transition: filter 0.3s;
+        }
+        
+        /* KLASA DLA EFEKTU ROZMYCIA */
+        body.blurred > *:not(.modal-backdrop) {
+            filter: blur(5px);
+            pointer-events: none; 
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-text {
+            color: var(--light-text);
+            font-size: 36px; 
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.6), 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 0;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.08); 
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            width: 400px;
+            height: 400px;
+            background: rgba(80, 80, 80, 0.1); 
+            border-radius: 50%;
+            filter: blur(150px);
+            z-index: -1;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; 
+            padding: 20px 50px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .logo-menu-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            position: absolute; 
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .menu ul {
+            list-style: none;
+            display: flex;
+            margin-top: 5px; 
+        }
+
+        .menu ul li {
+            margin: 0 12px; 
+        }
+
+        .menu ul li a {
+            color: var(--nav-text-color);
+            font-size: 14px; 
+            font-weight: 600;
+            transition: color 0.3s;
+            padding: 5px 0;
+        }
+
+        .menu ul li a.active,
+        .menu ul li a:hover {
+            color: var(--light-text);
+        }
+
+        .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-left: auto;
+        }
+
+        .language {
+            color: var(--nav-text-color);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .language i {
+            font-size: 10px;
+            margin-left: 5px;
+            color: var(--nav-text-color);
+        }
+
+        .login-btn {
+            background: var(--tag-bg-color);
+            color: var(--light-text);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .hero-section {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 900px;
+        }
+
+        .version-tag {
+            display: flex;
+            align-items: center;
+            padding: 6px 18px;
+            margin-bottom: 25px;
+            border-radius: 20px;
+            color: var(--main-accent); 
+            font-size: 14px;
+            font-weight: 600;
+            
+            background: linear-gradient(135deg, var(--tag-gradient-start) 0%, var(--tag-gradient-end) 100%);
+            border: 1px solid var(--tag-border);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .version-tag i {
+            margin-right: 8px;
+            font-size: 12px;
+        }
+
+        .main-title {
+            font-size: 68px;
+            font-weight: 800;
+            margin-bottom: 5px;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .highlight {
+            color: var(--highlight-color); 
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: var(--subtle-text);
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .action-button {
+            padding: 16px 50px;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--dark-bg); 
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            
+            background: linear-gradient(90deg, #bbbbbb 0%, #ffffff 100%);
+            box-shadow: 0 5px 20px var(--btn-shadow-color);
+        }
+
+        .action-button:hover {
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* --- STYLY DLA SEKCJI CENNIKA (ZAKUP) --- */
+        .pricing-section {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+            padding: 50px 20px;
+            width: 100%;
+            margin-top: 100px; 
+        }
+
+        .pricing-header {
+            text-align: center; 
+        }
+
+        .pricing-header h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .pricing-header p {
+            color: var(--subtle-text);
+            font-size: 16px;
+            margin-bottom: 60px;
+        }
+
+        .pricing-cards-container {
+            display: flex;
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .price-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            width: 33.33%;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            border: 1px solid transparent;
+            transition: border 0.3s, box-shadow 0.3s, transform 0.4s;
+        }
+
+        .price-card.best-choice {
+            border: 2px solid var(--best-choice-border);
+            box-shadow: 0 0 30px var(--best-choice-shadow); 
+            padding-top: 50px;
+            transform: scale(1.05); 
+            z-index: 5; 
+        }
+        
+        .best-choice-tag {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--tag-bg-color);
+            color: var(--light-text);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid var(--tag-border);
+            white-space: nowrap;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .card-description {
+            font-size: 14px;
+            color: var(--subtle-text);
+            margin-bottom: 20px;
+            height: 40px; 
+        }
+
+        .price-value {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--main-accent);
+            margin-bottom: 30px; 
+        }
+        
+        .feature-list {
+            list-style: none;
+            text-align: left;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: var(--light-text);
+            margin-bottom: 12px;
+        }
+
+        .feature-list li i {
+            margin-right: 10px;
+            color: var(--list-icon-color);
+            font-size: 10px;
+        }
+
+        .buy-now-btn {
+            width: 100%;
+            padding: 12px 0;
+            background-color: var(--buy-btn-bg);
+            color: var(--light-text);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .buy-now-btn.highlighted-btn {
+            background: linear-gradient(90deg, #bbbbbb 0%, #ffffff 100%);
+            color: var(--dark-bg);
+            box-shadow: 0 4px 15px var(--btn-shadow-color);
+        }
+        
+        .buy-now-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* --- STYLY DLA SEKCJI FUNKCJE/FAQ --- */
+        .features-section {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+            padding: 50px 20px;
+            width: 100%;
+            margin-top: 100px;
+            text-align: center;
+        }
+        
+        .features-header h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .features-placeholder {
+            padding: 50px;
+            border: 1px dashed var(--subtle-text);
+            border-radius: 10px;
+            margin-top: 30px;
+            max-width: 600px;
+            width: 100%;
+            color: var(--subtle-text);
+        }
+
+        /* --- STYLE MODALA ZAKUPU --- */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s;
+        }
+
+        .modal-backdrop.is-open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--modal-bg);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        
+        .modal-backdrop.is-open .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h3 {
+            font-size: 24px; 
+            font-weight: 700;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--light-text);
+            font-size: 30px; 
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .close-modal:hover {
+            opacity: 1;
+        }
+        
+        .form-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--light-text);
+            margin-bottom: 15px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group.full-width {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex-grow: 1;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--subtle-text);
+            margin-bottom: 5px;
+        }
+
+        .text-input, .select-dropdown {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            color: var(--light-text);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+            height: 48px; 
+            box-sizing: border-box;
+        }
+        
+        .text-input:focus, .select-dropdown:focus {
+            border-color: var(--main-accent);
+        }
+        
+        /* Metody płatności */
+        .payment-methods {
+            margin-top: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .payment-option-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: var(--card-bg); /* Tło nieaktywnego elementu */
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s, border 0.2s;
+            border: 1px solid transparent;
+        }
+        
+        /* ZMIANA: Tło aktywnego elementu na BIAŁE */
+        .payment-option-group.selected {
+            background-color: var(--active-option-bg); /* BIAŁY */
+            border: 1px solid var(--radio-checked-color); 
+        }
+
+        .payment-option-group label {
+            font-size: 14px;
+            font-weight: 600;
+            /* ZMIANA: Kolor tekstu na ciemny dla aktywnego elementu */
+            color: var(--light-text);
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* ZMIANA: Kolor tekstu wewnątrz aktywnej opcji na czarny */
+        .payment-option-group.selected label {
+             color: var(--active-option-text);
+        }
+
+        /* Ikona przelewu (bank) */
+        .payment-option-group .fa-bank,
+        .payment-option-group .fa-credit-card {
+            margin-right: 10px;
+            color: var(--subtle-text); /* Domyślnie szary */
+            font-size: 16px;
+        }
+        
+        /* ZMIANA: Ikona w aktywnej opcji na czarny */
+        .payment-option-group.selected .fa-bank,
+        .payment-option-group.selected .fa-credit-card {
+            color: var(--radio-checked-color); 
+        }
+
+        /* Stylizacja customowego radio buttona */
+        .payment-option-group input[type="radio"] {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--subtle-text);
+            border-radius: 50%;
+            transition: border-color 0.2s;
+            position: relative;
+            margin-left: 10px;
+        }
+        
+        .payment-option-group input[type="radio"]:checked {
+            border-color: var(--radio-checked-color); /* Ciemna ramka */
+        }
+
+        .payment-option-group input[type="radio"]:checked::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background-color: var(--radio-checked-color); /* Ciemne wypełnienie */
+            border-radius: 50%;
+        }
+
+        /* Oświadczenia */
+        .declarations {
+            margin-top: 25px;
+            font-size: 14px;
+            color: var(--subtle-text);
+        }
+        
+        .declaration-group {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .declaration-group input[type="checkbox"],
+        .declaration-group input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            margin-top: 2px;
+            margin-right: 10px;
+            flex-shrink: 0;
+            border: 1px solid var(--subtle-text); 
+            background: var(--card-bg);
+            appearance: none;
+            cursor: pointer;
+        }
+        
+        .declaration-group input[type="checkbox"]:checked,
+        .declaration-group input[type="radio"]:checked {
+             /* ZMIANA: Użycie ciemnego koloru akcentu */
+             background-color: var(--dark-bg); 
+             border-color: var(--radio-checked-color);
+             box-shadow: inset 0 0 0 3px var(--modal-bg);
+        }
+
+        .declaration-group a {
+            color: var(--main-accent); 
+            text-decoration: underline;
+        }
+        
+        .declaration-group label {
+            font-size: 14px;
+            line-height: 1.4;
+            color: var(--subtle-text);
+        }
+
+        /* Stopka modala */
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .final-price {
+            font-size: 30px; 
+            font-weight: 700;
+        }
+        
+        .price-currency {
+            font-size: 18px; 
+            font-weight: 400;
+        }
+
+        .pay-button {
+            padding: 12px 25px; 
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: linear-gradient(90deg, #bbbbbb 0%, #ffffff 100%);
+            color: var(--dark-bg);
+            transition: opacity 0.2s;
+        }
+        
+        .pay-button:hover {
+            opacity: 0.9;
+        }
+
+        /* --- Responsywność --- */
+        @media (max-width: 1000px) {
+            .price-card {
+                width: 80%;
+                margin-bottom: 30px;
+                transform: none !important; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo-menu-wrapper">
+            <span class="logo-text">WRAPY FPS-BOOST</span>
+            
+            <nav class="menu">
+                <ul>
+                    <li><a href="#" class="nav-link active" data-target="hero-content" data-page-name="Strona główna">Strona główna</a></li>
+                    <li><a href="#" class="nav-link" data-target="pricing-section" data-page-name="Zakup">Zakup</a></li>
+                    <li><a href="#" class="nav-link" data-target="features-section" data-page-name="Funkcje">Funkcje</a></li>
+                    <li><a href="#" class="nav-link" data-target="faq-section" data-page-name="FAQ">FAQ</a></li>
+                </ul>
+            </nav>
+        </div>
+        
+        <div class="user-controls">
+            <div class="language">PL <i class="fas fa-chevron-down"></i></div>
+            <button class="login-btn">Timbark...</button>
+        </div>
+    </header>
+
+    <main class="hero-section" id="hero-content">
+        <div class="content-wrapper">
+            <div class="version-tag">
+                <i class="fas fa-pencil-alt"></i> Wersja 1.0
+            </div>
+            <h1 class="main-title">
+                Uwolnij <span class="highlight">pełny potencjał</span>
+            </h1>
+            <p class="subtitle">
+                Swojej gry w Minecraft
+            </p>
+            <button class="action-button" id="action-start-button">
+                Rozpocznij teraz
+            </button>
+        </div>
+    </main>
+
+    <section class="pricing-section" id="pricing-section">
+        <div class="pricing-header">
+            <h2>Cennik</h2>
+            <p>Przystępne cenowo, elastyczne plany dla wszystkich użytkowników</p>
+        </div>
+        
+        <div class="pricing-cards-container">
+            
+            <div class="price-card" data-price="50">
+                <h3 class="card-title">Pakiet Basic</h3>
+                <p class="card-description">
+                    Chcesz lekkiego boosta fps? Jest to pakiet idealny dla ciebie.
+                </p>
+                <div class="price-value">50 PLN</div>
+                
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> Optymalizacja bazowa FPS</li>
+                    <li><i class="fas fa-check"></i> Redukcja opóźnień (Input Lag)</li>
+                    <li><i class="fas fa-check"></i> Szybki i łatwy dostęp</li>
+                </ul>
+                
+                <button class="buy-now-btn">Kup Teraz</button>
+            </div>
+            
+            <div class="price-card best-choice" data-price="100">
+                <div class="best-choice-tag">Najpopularniejszy wybór</div>
+                
+                <h3 class="card-title">Pakiet Premium</h3>
+                <p class="card-description">
+                    Chcesz pomylić grę z życiem realnym? W tym pakiecie możesz to odczuć!
+                </p>
+                <div class="price-value">100 PLN</div>
+                
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> Własne profile i mody optymalizacji</li>
+                    <li><i class="fas fa-check"></i> Maksymalna stabilność FPS (Zero Lag)</li>
+                    <li><i class="fas fa-check"></i> Priorytetowe wsparcie 24/7</li>
+                    <li><i class="fas fa-check"></i> Unikatowy, dożywotni identyfikator klienta</li>
+                    <li><i class="fas fa-check"></i> Wczesny dostęp do wszystkich aktualizacji</li>
+                    <li><i class="fas fa-check"></i> Bezpośredni kontakt z deweloperem</li>
+                </ul>
+                
+                <button class="buy-now-btn highlighted-btn">Kup Teraz</button>
+            </div>
+            
+            <div class="price-card" data-price="70">
+                <h3 class="card-title">Pakiet Advanced</h3>
+                <p class="card-description">
+                    Chcesz poczuć prawdziwą płynność? Wybierz ten pakiet, aby cieszyć się pełną optymalizacją.
+                </p>
+                <div class="price-value">70 PLN</div>
+                
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> Pełna optymalizacja FPS i Chwilowego Spadku</li>
+                    <li><i class="fas fa-check"></i> Zaawansowane ustawienia sieci (Ping)</li>
+                    <li><i class="fas fa-check"></i> Dostęp do nowej wersji Beta</li>
+                    <li><i class="fas fa-check"></i> Wsparcie techniczne</li>
+                </ul>
+                
+                <button class="buy-now-btn">Kup Teraz</button>
+            </div>
+            
+        </div>
+    </section>
+
+    <section class="features-section" id="features-section">
+        <div class="features-header">
+            <h2>Główne Funkcje</h2>
+            <p style="color: var(--subtle-text);">Odkryj, co sprawia, że nasz boost FPS jest najlepszy.</p>
+        </div>
+        
+        <div class="features-placeholder">
+            <h3>Tutaj pojawi się lista wszystkich funkcji i korzyści.</h3>
+            <p>Sekcja jest gotowa do wypełnienia treścią.</p>
+        </div>
+    </section>
+    
+    <section class="features-section" id="faq-section">
+        <div class="features-header">
+            <h2>FAQ (Często zadawane pytania)</h2>
+            <p style="color: var(--subtle-text);">Odpowiedzi na najczęściej zadawane pytania.</p>
+        </div>
+        
+        <div class="features-placeholder">
+            <h3>Sekcja FAQ jest przygotowana do dodania pytań i odpowiedzi.</h3>
+        </div>
+    </section>
+    
+    <div class="modal-backdrop" id="purchase-modal-backdrop">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Formularz zakupu</h3>
+                <button class="close-modal" id="close-modal-btn">&times;</button>
+            </div>
+            
+            <form id="purchase-form">
+                
+                <div class="form-group full-width">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" class="text-input" placeholder="Wpisz swój adres e-mail" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group input-with-label-inside">
+                        <input type="text" id="code-rabatowy" class="text-input" placeholder="Kod rabatowy">
+                    </div>
+                    <div class="form-group input-with-label-inside">
+                        <input type="text" id="code-tworcy" class="text-input" placeholder="Kod twórcy">
+                    </div>
+                </div>
+                
+                <div class="payment-methods">
+                    <div class="form-section-title">Wybierz metodę płatności</div>
+                    
+                    <div class="form-row" style="margin-bottom: 20px;">
+                        <div class="form-group" style="flex: 1 1 50%;">
+                            <select id="currency" class="select-dropdown">
+                                <option value="PLN">PLN</option>
+                                <option value="EUR">EUR</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="flex: 1 1 50%;"></div> 
+                    </div>
+
+                    <div class="payment-option-group selected" data-method="Przelew">
+                        <label for="method-przelew">
+                            <i class="fas fa-bank"></i>
+                            Przelew / BLIK / PaySafeCard
+                        </label>
+                        <input type="radio" name="payment-method" id="method-przelew" checked>
+                    </div>
+
+                    <div class="payment-option-group" data-method="Stripe">
+                        <label for="method-stripe">
+                            <i class="fas fa-credit-card"></i>
+                            Stripe
+                        </label>
+                        <input type="radio" name="payment-method" id="method-stripe">
+                    </div>
+                </div>
+                
+                <div class="declarations">
+                    <div class="form-section-title">Oświadczenia</div>
+
+                    <div class="declaration-group">
+                        <input type="checkbox" id="accept-regulations" required>
+                        <label for="accept-regulations">Akceptuję <a href="#">regulamin</a> oraz <a href="#">politykę prywatności</a>.</label>
+                    </div>
+
+                    <div class="declaration-group">
+                        <input type="checkbox" id="declaration-withdrawal" required>
+                        <label for="declaration-withdrawal">Wyrażam zgodę na natychmiastowe rozpoczęcie świadczenia usługi cyfrowej i przyjmuję do wiadomości, że tracę prawo do odstąpienia od umowy.</label>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <span class="final-price">
+                        <span id="final-price-display">0.00</span> 
+                        <span class="price-currency">PLN</span>
+                    </span>
+                    <button type="submit" class="pay-button">Zamawiam i płacę</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const actionButton = document.getElementById('action-start-button');
+            const purchaseLink = document.querySelector('.nav-link[data-page-name="Zakup"]'); 
+            
+            const buyButtons = document.querySelectorAll('.buy-now-btn');
+            const modalBackdrop = document.getElementById('purchase-modal-backdrop');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const body = document.body;
+            const finalPriceDisplay = document.getElementById('final-price-display');
+            const paymentOptionGroups = document.querySelectorAll('.payment-option-group');
+
+            // Mapowanie sekcji
+            const sections = {
+                'hero-content': document.getElementById('hero-content'),
+                'pricing-section': document.getElementById('pricing-section'),
+                'features-section': document.getElementById('features-section'),
+                'faq-section': document.getElementById('faq-section')           
+            };
+            
+            // Funkcja do przełączania widocznej sekcji i aktywnej klasy
+            function switchSection(targetId, activeLink) {
+                Object.values(sections).forEach(section => {
+                    if (section) section.style.display = 'none';
+                });
+
+                if (sections[targetId]) {
+                    sections[targetId].style.display = 'flex'; 
+                }
+
+                navLinks.forEach(link => link.classList.remove('active'));
+                activeLink.classList.add('active');
+            }
+
+            // Ustawienie początkowe (Strona główna)
+            const initialLink = document.querySelector('.nav-link[data-page-name="Strona główna"]');
+            switchSection('hero-content', initialLink);
+
+
+            // 1. Obsługa kliknięć na linki nawigacyjne
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('data-target');
+                    switchSection(targetId, link);
+                });
+            });
+
+            // 2. Obsługa kliknięcia przycisku "Rozpocznij teraz"
+            if (actionButton && purchaseLink) {
+                actionButton.addEventListener('click', () => {
+                    switchSection('pricing-section', purchaseLink);
+                });
+            }
+            
+            // 3. LOGIKA MODALA ZAKUPU
+            
+            // Otwieranie modala po kliknięciu "Kup Teraz"
+            buyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const priceCard = button.closest('.price-card');
+                    // Pobieranie ceny i formatowanie jej (np. 50.00, 70.00, 100.00)
+                    const price = priceCard ? priceCard.getAttribute('data-price') : '0';
+                    
+                    finalPriceDisplay.textContent = `${price}.00`;
+                    
+                    modalBackdrop.classList.add('is-open');
+                    body.classList.add('blurred');
+                });
+            });
+
+            // Zamykanie modala
+            function closeModal() {
+                modalBackdrop.classList.remove('is-open');
+                body.classList.remove('blurred');
+            }
+
+            // Zamykanie po kliknięciu X
+            closeModalBtn.addEventListener('click', closeModal);
+
+            // Zamykanie po kliknięciu tła (poza formularzem)
+            modalBackdrop.addEventListener('click', (e) => {
+                if (e.target === modalBackdrop) {
+                    closeModal();
+                }
+            });
+
+            // Obsługa wyboru metody płatności (wizualne podświetlenie)
+            paymentOptionGroups.forEach(option => {
+                option.addEventListener('click', () => {
+                    // Usuń klasę 'selected' ze wszystkich opcji
+                    paymentOptionGroups.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Dodaj klasę 'selected' do klikniętej opcji
+                    option.classList.add('selected');
+                    
+                    // Zaznacz faktyczny input radio
+                    option.querySelector('input[type="radio"]').checked = true;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
