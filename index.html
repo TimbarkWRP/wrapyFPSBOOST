@@ -41,8 +41,8 @@
             
             /* NOWE ZMIENNE DLA BIAŁEJ AKTYWNEJ OPCJI PŁATNOŚCI */
             --active-option-bg: #ffffff; 
-            --active-option-text: #141414; /* Ciemny tekst na jasnym tle */
-            --radio-checked-color: #141414; /* Ciemny kolor kółeczka/ramki aktywnej opcji */
+            --active-option-text: #141414; 
+            --radio-checked-color: #141414; 
         }
 
         /* --- Resetowanie i Podstawa --- */
@@ -412,16 +412,50 @@
             margin-bottom: 10px;
         }
         
-        .features-placeholder {
-            padding: 50px;
-            border: 1px dashed var(--subtle-text);
-            border-radius: 10px;
-            margin-top: 30px;
-            max-width: 600px;
+        /* USUNIĘCIE .features-placeholder */
+        
+        /* Style dla siatki funkcji (NOWOŚĆ) */
+        .features-grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Trzy kolumny równej szerokości */
+            gap: 30px;
+            margin-top: 40px;
+            max-width: 1200px;
             width: 100%;
-            color: var(--subtle-text);
         }
 
+        .feature-item {
+            background-color: var(--card-bg); /* Ciemniejsze tło */
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid var(--tag-border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            color: var(--light-text); /* Białe/jasne ikony */
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.4); 
+        }
+
+        .feature-item h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .feature-item p {
+            font-size: 14px;
+            color: var(--subtle-text);
+        }
+        
         /* --- STYLE MODALA ZAKUPU --- */
         .modal-backdrop {
             position: fixed;
@@ -552,7 +586,6 @@
             border: 1px solid transparent;
         }
         
-        /* ZMIANA: Tło aktywnego elementu na BIAŁE */
         .payment-option-group.selected {
             background-color: var(--active-option-bg); /* BIAŁY */
             border: 1px solid var(--radio-checked-color); 
@@ -561,27 +594,23 @@
         .payment-option-group label {
             font-size: 14px;
             font-weight: 600;
-            /* ZMIANA: Kolor tekstu na ciemny dla aktywnego elementu */
             color: var(--light-text);
             margin: 0;
             display: flex;
             align-items: center;
         }
         
-        /* ZMIANA: Kolor tekstu wewnątrz aktywnej opcji na czarny */
         .payment-option-group.selected label {
              color: var(--active-option-text);
         }
 
-        /* Ikona przelewu (bank) */
         .payment-option-group .fa-bank,
         .payment-option-group .fa-credit-card {
             margin-right: 10px;
-            color: var(--subtle-text); /* Domyślnie szary */
+            color: var(--subtle-text);
             font-size: 16px;
         }
         
-        /* ZMIANA: Ikona w aktywnej opcji na czarny */
         .payment-option-group.selected .fa-bank,
         .payment-option-group.selected .fa-credit-card {
             color: var(--radio-checked-color); 
@@ -600,7 +629,7 @@
         }
         
         .payment-option-group input[type="radio"]:checked {
-            border-color: var(--radio-checked-color); /* Ciemna ramka */
+            border-color: var(--radio-checked-color); 
         }
 
         .payment-option-group input[type="radio"]:checked::before {
@@ -611,7 +640,7 @@
             transform: translate(-50%, -50%);
             width: 8px;
             height: 8px;
-            background-color: var(--radio-checked-color); /* Ciemne wypełnienie */
+            background-color: var(--radio-checked-color); 
             border-radius: 50%;
         }
 
@@ -643,7 +672,6 @@
         
         .declaration-group input[type="checkbox"]:checked,
         .declaration-group input[type="radio"]:checked {
-             /* ZMIANA: Użycie ciemnego koloru akcentu */
              background-color: var(--dark-bg); 
              border-color: var(--radio-checked-color);
              box-shadow: inset 0 0 0 3px var(--modal-bg);
@@ -697,10 +725,27 @@
 
         /* --- Responsywność --- */
         @media (max-width: 1000px) {
+            .pricing-cards-container {
+                flex-direction: column;
+                align-items: center;
+            }
             .price-card {
                 width: 80%;
                 margin-bottom: 30px;
                 transform: none !important; 
+            }
+        }
+        
+        /* Responsywność dla siatki funkcji (NOWOŚĆ) */
+        @media (max-width: 900px) {
+            .features-grid-container {
+                grid-template-columns: repeat(2, 1fr); /* Dwie kolumny na tabletach */
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .features-grid-container {
+                grid-template-columns: 1fr; /* Jedna kolumna na telefonach */
             }
         }
     </style>
@@ -815,9 +860,43 @@
             <p style="color: var(--subtle-text);">Odkryj, co sprawia, że nasz boost FPS jest najlepszy.</p>
         </div>
         
-        <div class="features-placeholder">
-            <h3>Tutaj pojawi się lista wszystkich funkcji i korzyści.</h3>
-            <p>Sekcja jest gotowa do wypełnienia treścią.</p>
+        <div class="features-grid-container">
+            
+            <div class="feature-item">
+                <i class="fas fa-rocket feature-icon"></i>
+                <h4>Maksymalny FPS Boost</h4>
+                <p>Precyzyjna optymalizacja systemu i gry, gwarantująca najwyższą możliwą płynność i wydajność.</p>
+            </div>
+            
+            <div class="feature-item">
+                <i class="fas fa-tachometer-alt feature-icon"></i>
+                <h4>Redukcja Input Lag</h4>
+                <p>Eliminacja opóźnień między myszką/klawiaturą a grą, dająca natychmiastową reakcję w grze.</p>
+            </div>
+            
+            <div class="feature-item">
+                <i class="fas fa-shield-alt feature-icon"></i>
+                <h4>Stabilność i Bezpieczeństwo</h4>
+                <p>Gwarancja braku crashy i optymalizacja dostosowana do Twojego sprzętu.</p>
+            </div>
+            
+            <div class="feature-item">
+                <i class="fas fa-cogs feature-icon"></i>
+                <h4>Zaawansowane Profile</h4>
+                <p>Wiele gotowych, sprawdzonych profili, w tym ustawienia pod serwery Hypixel czy 2b2t.</p>
+            </div>
+            
+            <div class="feature-item">
+                <i class="fas fa-hdd feature-icon"></i>
+                <h4>Optymalizacja Zasobów</h4>
+                <p>Czyszczenie i optymalizacja dysku oraz pamięci RAM dla lepszej wydajności ogólnej systemu.</p>
+            </div>
+            
+            <div class="feature-item">
+                <i class="fas fa-headset feature-icon"></i>
+                <h4>Priorytetowe Wsparcie</h4>
+                <p>Szybka pomoc techniczna dostępna dla klientów Premium 24/7.</p>
+            </div>
         </div>
     </section>
     
